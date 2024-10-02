@@ -1,0 +1,29 @@
+
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+
+    {% for listing in page_obj %}
+    
+    <div class="col">
+        <a href="{% url 'listing-detail' listing.id %}" class="link-underline link-underline-opacity-0">
+
+            <div class="card text-bg-light h-100">
+                <div class="card-header ratio ratio-1x1" style="background-color: white;">
+                    <div style="display: flex; align-items: center; padding: 10px;">
+                            <img src="{{ listing.image_url }}" class="card-img-top">
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title ">{{ listing.title }}</h6>
+                    <p class="card-text"><small class="text-body-secondary">Updated {{ listing.how_long }} ago</small></p>
+                </div>
+                <div class="card-footer border-success text-bg-primary">
+                    <h6>${{ listing.price|floatformat:"-2g" }}</h6>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    {% endfor %}
+
+</div>

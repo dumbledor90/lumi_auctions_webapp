@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    {% if is_watchlist %}
+        <h2>Watchlist</h2>
+    {% else %}
+        <h2 class="mb-3">Active Listings {% if username %} by user {{ username }}{% endif %}</h2>
+    {% endif %}
+
+    {% include 'auctions/list_layout.html' %}
+
+    {% include 'auctions/pagination_layout.html' %}
+
+{% endblock %}

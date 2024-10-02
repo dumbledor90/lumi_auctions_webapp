@@ -1,0 +1,22 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+    <form method="post">
+
+        {% csrf_token %}
+        
+        <p>Are you sure you want to close this listing?</p>
+        <h3>{{ object.title }}</h3>
+        <!-- <h1>{{ listing.title }}</h1> -->
+        <br>
+        <!-- <img src="{{ listing.image_url }}" alt=""> -->
+        <h5>${{ listing.price }}</h5>
+        <!-- <div>{{ listing.description }}</div> -->
+        <input type="submit" value="Confirm">
+        
+    </form>
+    
+    <a href="{% url 'listing-detail' listing.pk %}">Cancel</a>
+
+{% endblock %}

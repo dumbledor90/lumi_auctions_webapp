@@ -1,0 +1,30 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+{% if selected %}
+    <h2>{{ selected.capitalize }}</h2>
+{% else %}
+    <h2>All categories</h2>
+{% endif %}
+
+<div class="dropdown mb-3">
+    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Select a category
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="{% url 'categories' %}" class="dropdown-item">All categories</a></li>
+        {% for value, name in categories.items %}
+        
+            <li><a href="{% url 'categories' value %}" class="dropdown-item">{{ name|capfirst }}</a></li>
+
+        {% endfor %}
+    </ul>
+
+</div>
+    
+{% include 'auctions/list_layout.html' %}
+
+{% include 'auctions/pagination_layout.html' %}
+    
+{% endblock %}

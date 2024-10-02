@@ -1,0 +1,50 @@
+
+{% if page_obj.paginator.num_pages > 1 %}
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        
+
+    {% if page_obj.has_previous %}
+    
+        <li class="page-item">
+            <a href="?page=1" class="page-link">&laquo;</a>
+        </li>
+        <li class="page-item">
+            <a href="?page={{ page_obj.previous_page_number }}" class="page-link">{{ page_obj.previous_page_number }}</a>
+        </li>
+
+    {% else %}
+    
+        <!-- <li class="page-item">
+            <a href="#" class="page-link disabled">Previous</a>
+        </li> -->
+
+    {% endif %}
+    
+        <li class="page-item">
+            <a class="page-link disabled" href="#">{{ page_obj.number }}</a>
+        </li>
+
+    {% if page_obj.has_next %}
+    
+        <li class="page-item">
+            <a href="?page={{ page_obj.next_page_number }}" class="page-link" >{{ page_obj.next_page_number }}</a>
+        </li>
+        <li class="page-item">
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">&raquo;</a>
+        </li>
+
+    {% else %}
+    
+        <!-- <li class="page-item">
+            <a href="#" class="page-link disabled" >Next</a>
+        </li>
+         -->
+    {% endif %}
+
+    </ul>
+    
+</nav>
+
+{% endif %}

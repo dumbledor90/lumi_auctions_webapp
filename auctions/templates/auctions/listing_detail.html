@@ -1,0 +1,152 @@
+{% extends 'auctions/layout.html' %}
+
+{% block body %}
+
+    <!-- Only logged in user who is not the creator of current listing can access watchlist function -->
+    {% if user.is_authenticated and user != listing.owner %}
+
+    <div class="mb-3">
+
+        <form action="" method="post">
+            {% csrf_token %}
+    
+            {% if in_watchlist %}
+            <input class="btn btn-outline-success" type="submit" name="" value="WATCHED">
+            {% else %}
+            <input class="btn btn-outline-primary" type="submit" name="" value="Add to Watchlist">
+            {% endif %}
+
+            <!-- This hidden field is to provide context for view function to know what form to deal with -->
+            <input type="hidden" name="watchlist">
+    
+        </form>
+
+    </div>
+
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col">
+            <div class="ratio ratio-1x1">
+                <img src="{{ listing.image_url }}" class="img-fluid rounded-start card-img-top" alt="...">
+            </div>
+        </div>
+
+        <div class="col mb-3">
+            
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5>{{ listing.title }}</h5>
+                </div>
+                
+                <div class="card-header bg-transparent">
+                    Listed by <a href="{% url 'index' listing.owner %}" class="card-link link-underline link-underline-opacity-0">{{ listing.owner }}</a>
+                    <a href="{% url 'categories' listing.category %}" class="card-link link-underline link-underline-opacity-0">{{ listing.category|capfirst }}</a>
+                </div>
+                
+                <div class="card-body text-success">
+                    <h5 class="card-title">${{ listing.price|floatformat:"-2g" }}</h5>
+                    <p class="card-text">{{ listing.description }}</p>
+                    
+                </div>
+                
+
+                <!-- This section is for bidding -->
+                <div class="card-footer bg-transparent">
+                    There are <strong>{{ listing.bid_count }}</strong> bid(s) for this item.
+                    <p>
+
+                        {% if lastest_bidder == user %}
+            
+                            {% if listing.active %}
+                                Your bid is the current bid.
+                            {% else %}
+                                <strong>You won this bid!</strong> 
+                            {% endif %}
+                    
+                        {% elif not listing.active %}
+                            <strong>CLOSED</strong>
+                        {% endif %}
+
+                    </p>
+                </div>
+
+                
+                {% if user.is_authenticated and user != listing.owner %}
+                    <div class="card-footer bg-transparent">
+                        <form action="{% url 'listing-detail' listing.pk %}" method="post">
+                            {% csrf_token %}
+                            
+                            {{ bid_form }}
+                    
+                            <!-- This hidden field is to provide context for the view function to know what form to deal with -->
+                            <input type="hidden" name="{{ bid_form.prefix }}">
+                                
+                            <div class="d-grid">
+                                <input type="submit" Value="Place Bid" class="btn btn-primary">
+                            </div>
+
+                        </form>
+                        
+                    {% elif not user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="btn btn-primary">Log in to bid</a>
+                    </div>
+
+                {% endif %}
+                    
+                <!-- Allow listing creator to edit it -->
+                {% if user == listing.owner %}
+                    <div class="card-footer bg-transparent d-grid">
+                        <a href="{% url 'update-listing' listing.pk %}" class="btn btn-secondary">Edit Item</a>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- This section is for comments -->
+    {% if user.is_authenticated %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {{ comment_form }}
+
+        <input type="submit" value="Add a comment" class="btn btn-outline-secondary mb-3 mt-3">
+
+    </form>
+
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Log in to comment</a>
+    {% endif %}
+
+    
+    {% if comments %}
+    
+    <div class="list-group">
+
+        {% for comment in comments %}
+
+        <div class="list-group-item list-group-item-action" aria-current="true">
+            <div class="d-flex w-100 justify-content-between">
+                <a href="{% url 'index' comment.user %}" class="link-underline link-underline-opacity-0">
+                    <h6 class="mb-1">{{ comment.user.username }}</h6>
+                </a>
+                <small>{{ comment.how_long }} ago</small>
+            </div>
+            <p class="mb-1">{{ comment.content }}</p>
+        </div>
+        <br>
+
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+    <br>
+
+{% endblock %}

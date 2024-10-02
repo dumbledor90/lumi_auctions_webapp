@@ -1,0 +1,37 @@
+{% for field in form %}
+
+{% if field.html_name == 'start_price' or field.html_name == 'bid-bid_price' %}
+
+    <div class="text-danger">
+        {{ field.errors }}
+        
+    </div>
+    <div class="fieldWrapper mb-3 mt-1 input-group">
+            <!-- {{ field.label_tag }}  -->
+        
+            <span class="input-group-text">$</span>
+            {{ field }}
+            {% if field.help_text %}
+            <p class="help" id="{{ field.auto_id }}_helptext">
+                {{ field.help_text|safe }}
+            </p>
+
+        {% endif %}
+    </div>
+
+{% else %}
+
+    <div class="fieldWrapper mb-3">
+        {{ field.errors }}
+            <!-- {{ field.label_tag }}  -->
+        {{ field }}
+        {% if field.help_text %}
+        <p class="help" id="{{ field.auto_id }}_helptext">
+            {{ field.help_text|safe }}
+        </p>
+        {% endif %}
+    </div>
+    
+{% endif %}
+
+{% endfor %}
